@@ -3,16 +3,12 @@ import axios from 'axios';
 import { ref } from 'vue';
 const username = ref('')
 const password = ref('')
-const name = ref('')
-const adress = ref('')
 const email = ref('')
-const avatar = ref('')
-const pasport = ref()
 const register = async () => {
   try {
     await axios.post('http://localhost:9090/api/register/', {
-      username: username.value,
-      password: password.value,
+      user_name: username.value,
+      user_password: password.value,
       user_email: useremail.value,
     });
     alert('Success')

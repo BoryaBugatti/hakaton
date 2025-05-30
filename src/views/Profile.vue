@@ -103,7 +103,7 @@ watch(() => route.params.client_id, (newClientId) => {
                 <div class="btns">
                 <button type="button" @click="logout">Выйти</button>
                 
-                    <router-link to="/applications">Заявки</router-link>
+                    <router-link to="/confirm-apps">Заявки</router-link>
                     <router-link to="/projects-tracking">Проекты</router-link>
                 </div>
             </div>
