@@ -25,7 +25,7 @@
             </div>
             <input type="date" class = "date-input">
             <div class="checkbox-block">
-                <p>Хотите чтобы мы поддерживали проект?</p>
+                <p>Хотите чтобы рассчет времени провел Менеджер?</p>
                 <input type="checkbox" class = "checkbox">
             </div>
             <button type="button">Отправить</button>
