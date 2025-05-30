@@ -21,6 +21,7 @@
             </select>
             <div class="date-text">
                 <p>Введите желательный срок исполнения:</p>
+                <p class = "gray-txt">Мы не можем гарантировать, что в выбранную вами дату проект закончится, потому что основная дата конца проекта определяется по вашему описанию.</p>
                 <p class = "gray-txt">Наши менеджеры подберут команду специально для вас!</p>
             </div>
             <input type="date" class = "date-input">
@@ -101,7 +102,7 @@ select{
 }
 
 .date-input{
-    margin-top:40px;
+    margin-top:80px;
 }
 .wrapper{
     display: flex;
@@ -142,6 +143,7 @@ p{
   color: rgb(166, 166, 166);
   font-family: "Noto Sans", sans-serif;
   font-size: 12px;
+  max-width: 600px;
 }
 @media screen and (max-width: 480px){
     .gray-txt{
@@ -166,6 +168,9 @@ p{
     form{
         margin-left: 20px;
     }
+    .date-input{
+        margin-top: 140px;
+    }
 }
 @media screen and (max-width: 1023px){
     .application-form-wrapper{
@@ -174,5 +179,6 @@ p{
      .main-page-img{
     display: none;
 }
+    
 }
 </style>

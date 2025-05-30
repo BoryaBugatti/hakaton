@@ -31,8 +31,8 @@ const closeModal = () => {
   showed.value = false;
 };
 
-const ShowEditor = () => {
-  showed.value = true; // Show the modal
+const ShowStatus = () => {
+  showed.value = true; 
 };
 
 const EditImage = async (clientId)=>{
@@ -51,7 +51,7 @@ const fetchUserData = async (clientId) => {
     const response = await axios.get(`http://localhost:9090/api/profile/${clientId}`);
     const data = response.data;
     user.value = data.client;
-    sales.value = data.sales;
+    project.value = data.project;
     const storedUser = JSON.parse(localStorage.getItem('user'));
     console.log('Stored user:', storedUser);
     if (storedUser && storedUser.client_id.toString() === clientId.toString()) {
@@ -100,7 +100,12 @@ watch(() => route.params.client_id, (newClientId) => {
                     <h3>Ваш E-mal:</h3>
                     <p class = "email">{{ useremail }}</p>
                 </div>
-                <button type="button">Выйти</button>
+                <div class="btns">
+                <button type="button" @click="logout">Выйти</button>
+                
+                    <router-link to="/applications">Заявки</router-link>
+                    <router-link to="/projects-tracking">Проекты</router-link>
+                </div>
             </div>
             
         </div>
@@ -138,15 +143,61 @@ watch(() => route.params.client_id, (newClientId) => {
                     <p class = "proj-text-title">Прогресс</p>
                     <p class = "proj-text-progress">10%</p>
                 </div>
+                <button @click ="ShowStatus"class = "status-btn" type="button">Состояние</button>
             </div>
         </div>
     </div>
 </div>
 </template>
 <style scoped>
+.btns{
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    align-items: center;
+}
 .project-title {
     font-size: 1.5em;
 }
+a{
+    margin-top: 11px;
+  background-color: rgb(0, 135, 219);
+  text-decoration: none;
+  color: white;
+  padding:4px;
+  font-family: "Noto Sans", sans-serif;
+  border-radius: 24px;
+  font-size: 14px;
+}
+a:hover{
+  outline: 1px solid rgb(0, 135, 219);
+  color: rgb(0, 135, 219);
+  background-color: white;
+  transition: 0.1s ease;
+}
+.status-btn:hover{
+  cursor: pointer;
+  background-color: rgb(0, 135, 219);
+  outline: 1px solid white;
+  color: white;
+  transition: 0.1s ease;
+}
+
+.status-btn:active{
+  transform: scale(0.95);
+}
+.status-btn{
+  padding: 6px;
+  border-radius: 16px;
+  border: none;
+  background-color: #ffffff;
+  color: rgb(0, 135, 219);
+  font-family: "Noto Sans", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: 20px;
+  outline: 1px solid rgb(0, 135, 219);
+  }
 .proj-text-name{
     font-size: 18px;
     color: rgb(0, 135, 219);

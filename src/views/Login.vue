@@ -3,19 +3,19 @@ import { ref } from 'vue';
 import axios from 'axios';
 import router from '@/router';
 
-const username = ref('');
+const useremail = ref('');
 const password = ref('');
 const errorMessage = ref('');
 
 const login = async () => {
   try {
     const response = await axios.post('http://localhost:9090/api/login/', {
-      username: username.value,
-      password: password.value,
+      user_email: useremail.value,
+      user_password: password.value,
     });
     
     const userdata = response.data;
-    console.log('Data', userdata); // Проверяем, что мы получаем от сервера
+    console.log('Data', userdata); 
 
     if (userdata && userdata.client_id) {
       localStorage.setItem('user', JSON.stringify(userdata));
@@ -37,8 +37,8 @@ const login = async () => {
       <div class="login-form">
         <form @submit.prevent="login" class = "form-login">
           <h2 class = "title">Авторизация</h2>
-            <p class="login-title">Ваш логин:</p>
-            <input v-model="username" placeholder="Логин" class = "login-input" required />
+            <p class="login-title">Ваш E-mail:</p>
+            <input v-model="useremail" placeholder="Логин" class = "login-input" required />
             <div class="pass-titles">
               <p class="pass-title">Ваш пароль: </p>
               </div>
