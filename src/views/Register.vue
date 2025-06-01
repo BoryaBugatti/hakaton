@@ -1,19 +1,36 @@
 <script setup>
 import axios from 'axios';
 import { ref } from 'vue';
-const username = ref('')
-const password = ref('')
-const email = ref('')
+
+const username = ref('');
+const password = ref('');
+const email = ref('');
+const errorMessage = ref('');
+
 const register = async () => {
   try {
-    await axios.post('http://localhost:9090/api/register/', {
+    const response = await axios.post('http://localhost:8090/api/registration', {
       user_name: username.value,
       user_password: password.value,
-      user_email: useremail.value,
+      user_email: email.value,
     });
-    alert('Success')
+
+    if (response.data.status === 'access') {
+      alert('Вы успешно зарегистрировались!');
+      // Очистка полей после успешной регистрации
+      username.value = '';
+      password.value = '';
+      email.value = '';
+    }
   } catch (error) {
-    console.error('Ошибка создания пользователя:', error);
+    if (error.response) {
+      // Ошибка от сервера
+      errorMessage.value = error.response.data || 'Ошибка регистрации';
+    } else {
+      // Ошибка сети или другая ошибка
+      errorMessage.value = 'Ошибка соединения с сервером';
+    }
+    console.error('Ошибка регистрации:', error);
   }
 };
 </script>
@@ -30,13 +47,13 @@ const register = async () => {
             <div class="pass-titles">
                 <p class="pass-title">Введите E-mail: </p>
             </div>
-            <input type="email" v-model="useremail" placeholder="E-mail" required  class = "login-input"/> 
+            <input type="email" v-model="email" placeholder="E-mail" required  class = "login-input"/> 
             
             <div class="pass-titles">
                 <p class="pass-title">Введите пароль: </p>
             </div>
             <input type="password" v-model="password" placeholder="Пароль" required  class = "password-input"/> 
-            <button class = "sbmt-btn" type="submit">Войти</button>
+            <button class = "sbmt-btn" type="submit">Зарегистрироваться</button>
             <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>
         </form>
         </div>

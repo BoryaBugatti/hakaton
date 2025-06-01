@@ -1,4 +1,62 @@
 <script setup>
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+const isRegistered = ref(false);
+const projectName = ref('');
+const projectDescription = ref('');
+const projectBudget = ref('');
+const projectType = ref('');
+const projectDeadline = ref('');
+const aiNeeded = ref(false);
+const storedUser = JSON.parse(localStorage.getItem('user'));
+const submitForm = async () => {
+    if (!storedUser) {
+        alert('Пожалуйста, зарегистрируйтесь, чтобы сделать заказ.');
+        return;
+    }
+    try {
+            if(aiNeeded.value == True){
+                const response = await axios.post('http://localhost:8090/api/make-app/aiaiai', {
+                            project_name: projectName.value,
+                            project_description: projectDescription.value,
+                            project_budget: projectBudget.value,
+                            project_type: projectType.value,
+                            project_deadline: projectDeadline.value,
+                    });
+                    if (!response.ok) {
+                        throw new Error('Ошибка при отправке формы');
+                    }
+                    alert('Форма успешно отправлена!');
+                    resetForm();
+            }
+            else{
+                const response = await axios.post(`http://localhost:8090/api/make-app/manager`, {
+                            project_name: projectName.value,
+                            project_description: projectDescription.value,
+                            project_budget: projectBudget.value,
+                            project_type: projectType.value,
+                            project_deadline: projectDeadline.value,
+                    });
+                    if (!response.ok) {
+                        throw new Error('Ошибка при отправке формы');
+                    }
+                    alert('Форма успешно отправлена!');
+                    resetForm();
+                
+            }
+        }catch (error) 
+        {
+            alert(error.message);
+        }
+}
+function resetForm(){
+    projectName.value = '';
+    projectDescription.value = '';
+    projectBudget.value = '';
+    projectType.value = '';
+    projectDeadline.value = '';
+    supportNeeded.value = false;
+};
 </script>
 <template>
     <div class="wrapper">
@@ -7,29 +65,29 @@
         <form action="">
             <h1>Давайте отправим вашу заявку:</h1>
             <p>Введите название вашего проекта:</p>
-            <input type="text" placeholder="Название вашего проекта">
+            <input v-model="projectName" type="text" placeholder="Название вашего проекта">
             <p>Введите описание проекта:</p>
-            <input type="text" placeholder="Описание проекта">
+            <input v-model="projectDescription" type="text" placeholder="Описание проекта">
             <p>Введите бюджет проекта:</p>
-            <input type="text" placeholder="Бюджет проекта">
+            <input v-model="projectBudget" type="text" placeholder="Бюджет проекта">
             <p>Выберете тип проекта:</p>
-            <select name="" id="">
-                <option value="">Десктоп</option>
-                <option value="">Веб-приложение</option>
-                <option value="">Мобильное приложение</option>
-                <option value="">Интеграция систем</option>
+            <select v-model="projectType" name="" id="">
+                <option value="Desctop">Десктоп</option>
+                <option value="Web">Веб-приложение</option>
+                <option value="Mobile">Мобильное приложение</option>
+                <option value="Integration">Интеграция систем</option>
             </select>
             <div class="date-text">
                 <p>Введите желательный срок исполнения:</p>
                 <p class = "gray-txt">Мы не можем гарантировать, что в выбранную вами дату проект закончится, потому что основная дата конца проекта определяется по вашему описанию.</p>
                 <p class = "gray-txt">Наши менеджеры подберут команду специально для вас!</p>
             </div>
-            <input type="date" class = "date-input">
+            <input v-model="aiNeeded" type="date" class = "date-input">
             <div class="checkbox-block">
                 <p>Хотите чтобы рассчет времени провел Менеджер?</p>
                 <input type="checkbox" class = "checkbox">
             </div>
-            <button type="button">Отправить</button>
+            <button type="submit">Отправить</button>
         </form>
         <div class="img-block">
             <img class = "main-page-img"src="../../public/logo-files/programming2.png" alt="">
@@ -64,6 +122,7 @@
     margin-left: 10px;
 }
 button{
+    max-width: 400px;
     background-color: #0d6efd;
     color: white;
     padding: 6px;
@@ -88,7 +147,7 @@ h1{
 }
 select{
     padding: 6px;
-    width: 400px;
+    width: 410px;
     border: 1px solid rgb(0, 135, 219);
     border-radius: 16px;
     color: rgb(43, 43, 43);
@@ -152,7 +211,9 @@ p{
     .application-form-wrapper{
         display: flex;
     }
-    
+    button{
+        max-width: 300px;
+    }
     .main-page-img{
     display: none;
 }

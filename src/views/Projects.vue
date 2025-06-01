@@ -1,55 +1,91 @@
 <script setup>
-import { ref } from 'vue'
-const orion = 'ORION'
-const isBackDone = ref('');
-const isFrontDone = ref('');
-const isDevDone = ref('');
-const isDbDone = ref('')
+import { ref, onMounted } from 'vue'
+import axios from 'axios'; 
+const projects = ref([]);
+const fetchProjectsData = async () => { 
+    try { 
+        const response = await axios.get('/api/projects');
+        const data = response.data;
+
+    projects.value = data.map(project => ({
+        project_id: project.project_id,
+        project_name: project.project_name,
+        milestones: project.milestone.map(milestone => ({
+            project_id: milestone.project_id,
+            milestone_name: milestone.milestone_name,
+            milestone_status: milestone.milestone_status
+        }))
+    }));
+} catch (error) {
+    console.error('Ошибка получения данных проектов:', error);
+}
+};
+
+const SaveProject = async (projectId) => { 
+    const projectToSave = projects.value.find(p => p.project_id === projectId); 
+    const dataToSave = projectToSave.milestones.map(milestone => 
+        ({ milestone_name: milestone.milestone_name, 
+            milestone_status: milestone.milestone_status
+         }));
+try {
+    const response = await axios.post(`/api/projects/${projectId}`, dataToSave); // Брат тоже  URL
+    console.log('Проект успешно сохранен:', response.data);
+} catch (error) {
+    console.error('Ошибка сохранения проекта:', error);
+}
+}
+
+onMounted(() => { fetchProjectsData(); }); 
 </script>
+
 <template>
 <div class="wrapper">
     <div class="projects-block">
-            <div class="project">
-                <div class="proj-field">
-                    <h1 class = "proj-text-name">Название проекта</h1>
-                    <h1 class = "proj-text-name">Имя проекта</h1>
-                </div>
-                <hr>
-                <div class="proj-field">
-                    <p class = "proj-text-name">Backend</p>
-                    <select v-model="isBackDone" name="" id="">
-                        <option value="ready">Сделан</option>
-                        <option value="notready">Не сделан</option>
-                    </select>
-                </div>
-                <hr>
-                <div class="proj-field">
-                    <p class = "proj-text-name">Frontend</p>
-                    <select v-model="isFrontDone" name="" id="">
-                        <option value="ready">Сделан</option>
-                        <option value="notready">Не сделан</option>
-                    </select>
-                </div>
-                <hr>
-                <div class="proj-field">
-                    <p class = "proj-text-name">Data Base</p>
-                    <select v-model="isDbDone" name="" id="">
-                        <option value="ready">Сделан</option>
-                        <option value="notready">Не сделан</option>
-                    </select>
-                </div>
-                <hr>
-                <div class="proj-field">
-                    <p class = "proj-text-name">Dev</p>
-                    <select v-model="isDevDone" name="" id="">
-                        <option value="ready">Сделан</option>
-                        <option value="notready">Не сделан</option>
-                    </select>
-                </div>
-                <button class = "status-btn"type="button">Сохранить</button>
+        <div class="project">
+            <div class="proj-field">
+                <h1 class="proj-text-name">Название проекта</h1>
+                <h1 class="proj-text-name">Имя проекта</h1>
             </div>
+            <hr>
+            <div class="proj-field">
+                <p class="proj-text-name">Серверная часть</p>
+                <select v-model="isBackDone">
+                    <option value="ready">Сделан</option>
+                    <option value="in work">В работе</option>
+                    <option value="notready">Не сделан</option>
+                </select>
+            </div>
+            <hr>
+            <div class="proj-field">
+                <p class="proj-text-name">Клиентская часть</p>
+                <select v-model="isFrontDone">
+                    <option value="ready">Сделан</option>
+                    <option value="in work">В работе</option>
+                    <option value="notready">Не сделан</option>
+                </select>
+            </div>
+            <hr>
+            <div class="proj-field">
+                <p class="proj-text-name">База данных</p>
+                <select v-model="isDbDone">
+                    <option value="ready">Сделан</option>
+                    <option value="in work">В работе</option>
+                    <option value="notready">Не сделан</option>
+                </select>
+            </div>
+            <hr>
+            <div class="proj-field">
+                <p class="proj-text-name">Девопс</p>
+                <select v-model="isDevDone">
+                    <option value="ready">Сделан</option>
+                    <option value="in work">В работе</option>
+                    <option value="notready">Не сделан</option>
+                </select>
+            </div>
+            <button class="status-btn" @click="SaveProject">Сохранить</button>
         </div>
-        </div>
+    </div>
+</div>
 </template>
 <style scoped>
 button{

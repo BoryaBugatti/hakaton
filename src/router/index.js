@@ -31,7 +31,7 @@ const router = createRouter({
       component: Login
     },
     {
-      path: '/profile',
+      path: '/profile/:client_id',
       component: Profile,
       name: 'Profile',
       props: true
@@ -50,8 +50,15 @@ const router = createRouter({
       path: '/confirm-apps',
       name: 'confirm-apps',
       component: ConfirmApps
-    }
+    },
   ],
 })
-
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = !!localStorage.getItem('user');
+  if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {
+    next({ path: '/login' });
+  } else {
+    next();
+  }
+});
 export default router

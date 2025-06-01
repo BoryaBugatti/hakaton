@@ -1,4 +1,29 @@
 <script setup>
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+const user = ref({});
+const router = useRouter();
+
+const goToProfile = () => {
+
+  const user = localStorage.getItem('user');
+  const storedUser = JSON.parse(localStorage.getItem('user'));
+  if (user) {
+    router.push({ path: `/profile/${storedUser.client_id}` });
+  } else {
+    router.push({ name: 'login' });
+  }
+};
+const GetuserInfo = () => {
+  const storedUser = localStorage.getItem('user');
+  console.log(storedUser)
+  if (storedUser) {
+    user.value = JSON.parse(storedUser);
+  } else {
+    user.value = null;
+  }
+}
+onMounted(GetuserInfo)
 </script>
 <template>
 <div class="header">
@@ -26,14 +51,14 @@
               <p class = "btn-txt">Создать заявку</p>
               </div></router-link>
           </li><li>
-            <router-link to="/profile">
-              <div class="btn">
+            <a class = "nav-btn" v-on:click="goToProfile"><div class="btn">
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                 <circle cx="12" cy="7" r="4"></circle>
               </svg>
               <p class = "btn-txt">Профиль</p>
-              </div></router-link>
+              </div></a>
+              
           </li>
         </ul>
     </div>
