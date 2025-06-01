@@ -1,0 +1,55 @@
+### Symfony ###
+/.env
+/.env.local
+/.env.*.local
+/.env.dev
+/.env.prod
+/.env.test
+/var/
+!/var/cache/.gitkeep
+!/var/log/.gitkeep
+!/var/sessions/.gitkeep
+/vendor/
+###> symfony/framework-bundle ###
+/public/bundles/
+/phpunit.xml
+###< symfony/framework-bundle ###
+
+### Composer ###
+/composer.phar
+/composer.lock
+
+### PHP ###
+.idea/
+.phpunit.result.cache
+.php-cs-fixer.cache
+*.swp
+
+### Node ###
+/node_modules/
+/public/build/
+npm-debug.log
+yarn-error.log
+
+### Assets ###
+/assets/bundles/
+/public/bundles/
+/public/js/
+/public/css/
+
+### OS generated files ###
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+### Testing ###
+.phpunit.cache
+/coverage/
+
+### Deployment ###
+!/docker/
+/docker-compose.override.yml

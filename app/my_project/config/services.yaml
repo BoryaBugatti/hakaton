@@ -1,0 +1,25 @@
+parameters:
+    yandex_api_key: '%env(YANDEX_API_KEY)%'
+    yandex_folder_id: '%env(YANDEX_FOLDER_ID)%'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        bind:
+            string $yandexApiKey: '%yandex_api_key%'
+            string $yandexFolderId: '%yandex_folder_id%'
+
+    App\Controller\AiProcessingController:
+        arguments:
+            $httpClient: '@http_client'
+            $logger: '@logger'
+            $yandexApiKey: '%yandex_api_key%'
+            $yandexFolderId: '%yandex_folder_id%'
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
